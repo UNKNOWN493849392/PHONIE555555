@@ -1,0 +1,90 @@
+-- Create the ScreenGui but make it invisible initially
+local screenGui = Instance.new("ScreenGui")
+screenGui.Enabled = false  -- Hide the GUI initially
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Create the main frame
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 300, 0, 200)
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+mainFrame.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.Parent = screenGui
+
+-- Create the black sub-frame
+local blackFrame = Instance.new("Frame")
+blackFrame.Size = UDim2.new(0.9, 0, 0.6, 0)
+blackFrame.Position = UDim2.new(0.05, 0, 0.3, 0)
+blackFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+blackFrame.Parent = mainFrame
+
+-- Create the "OP ADMIN PANEL" text label
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, 0, 0.2, 0)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.Text = "OP ADMIN PANEL"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.TextScaled = true
+titleLabel.Parent = mainFrame
+
+-- Create the textbox for entering a player's username
+local usernameBox = Instance.new("TextBox")
+usernameBox.Size = UDim2.new(0.8, 0, 0.15, 0)
+usernameBox.Position = UDim2.new(0.1, 0, 0.35, 0)
+usernameBox.PlaceholderText = "Enter Username"
+usernameBox.Text = ""
+usernameBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+usernameBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+usernameBox.Font = Enum.Font.SourceSans
+usernameBox.TextScaled = true
+usernameBox.Parent = blackFrame
+
+-- Create the Kill button
+local killButton = Instance.new("TextButton")
+killButton.Size = UDim2.new(0.4, 0, 0.2, 0)
+killButton.Position = UDim2.new(0.05, 0, 0.6, 0)
+killButton.Text = "Kill"
+killButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+killButton.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+killButton.Font = Enum.Font.SourceSansBold
+killButton.TextScaled = true
+killButton.Parent = blackFrame
+
+-- Create the Kick button
+local kickButton = Instance.new("TextButton")
+kickButton.Size = UDim2.new(0.4, 0, 0.2, 0)
+kickButton.Position = UDim2.new(0.55, 0, 0.6, 0)
+kickButton.Text = "Kick"
+kickButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+kickButton.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+kickButton.Font = Enum.Font.SourceSansBold
+kickButton.TextScaled = true
+kickButton.Parent = blackFrame
+
+-- Function to kill the player
+killButton.MouseButton1Click:Connect(function()
+    local username = usernameBox.Text
+    local playerToKill = game.Players:FindFirstChild(username)
+    if playerToKill and playerToKill.Character then
+        playerToKill.Character:BreakJoints()
+    end
+end)
+
+-- Function to kick the player
+kickButton.MouseButton1Click:Connect(function()
+    local username = usernameBox.Text
+    local playerToKick = game.Players:FindFirstChild(username)
+    if playerToKick then
+        playerToKick:Kick("You have been kicked by an admin.")
+    end
+end)
+
+-- Show the GUI when the player types /OPPANEL in the chat
+game.Players.LocalPlayer.Chatted:Connect(function(msg)
+    if msg:lower() == "/oppanel" then
+        screenGui.Enabled = not screenGui.Enabled -- Toggle the GUI on and off
+    end
+end)
